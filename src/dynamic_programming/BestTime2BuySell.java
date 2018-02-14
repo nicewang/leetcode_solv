@@ -20,7 +20,7 @@ public class BestTime2BuySell {
 	
 	public static void main(String[] args) {
 		int[] data = {7, 1, 5, 3, 6, 4};
-		System.out.println(maxProfit(data));
+		System.out.println(maxProfit_mySelf(data));
 	}
 	
 	/**
@@ -110,11 +110,11 @@ public class BestTime2BuySell {
 
 	private static void insertSort(int[] data, int[] label, int length) {
 		// TODO Auto-generated method stub
-		for(int i = 0; i < length; i++) {
-			int tmp = data[i];
-			int tmp_label = label[i];
+		for(int i = 0; i < length - 1; i++) {
+			int tmp = data[i+1];
+			int tmp_label = label[i+1];
 			int j;
-			for(j = i; j > 0 && tmp < data[j-1]; j--) {
+			for(j = i + 1; j > 0 && tmp < data[j-1]; j--) {
 				data[j] = data[j-1];
 				label[j] = label[j-1];
 			}
