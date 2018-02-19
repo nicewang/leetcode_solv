@@ -1,16 +1,18 @@
-package Depth_first_Search;
+package Breath_first_Search;
 
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class GraphDFS {
+public class GraphBFS {
+	
 	private final int maxVertices = 20;
-	private int adjMatrix[][];
 	private Vertex vertexList[];
+	private int adjMatrix[][];
 	private int vertexCount;
-	private Stack<Integer> theStack;
+	private Queue<Integer> theQueue;
 	
 	/**
-	 * 深度优先遍历的图为：
+	 * 广度优先遍历的图为：
 	 * A
 	 * |
 	 * B-H
@@ -21,7 +23,7 @@ public class GraphDFS {
 	 * @param argv
 	 */
 	public static void main(String argv[]) {
-		GraphDFS graph = new GraphDFS();
+		GraphBFS graph = new GraphBFS();
 		graph.addVertex('A');
 		graph.addVertex('B');
 		graph.addVertex('C');
@@ -38,17 +40,17 @@ public class GraphDFS {
 		graph.addEdge(4, 6);
 		graph.addEdge(4, 7);
 		graph.addEdge(1, 7);
-		graph.dfs();
+		graph.bfs();
 	}
 	
-	public GraphDFS() {
+	public GraphBFS() {
 		vertexList = new Vertex[maxVertices];
 		adjMatrix = new int[maxVertices][maxVertices];
 		vertexCount = 0;
 		for(int i = 0; i < maxVertices; i++)
 			for(int j = 0; j < maxVertices; j++)
 				adjMatrix[i][j] = 0;
-		theStack = new Stack<Integer>();
+		theQueue = new LinkedList<Integer>();
 	}
 	
 	public void addVertex(char lab) {
@@ -64,41 +66,41 @@ public class GraphDFS {
 		System.out.println(vertexList[v].label);
 	}
 	
-	public void dfs() {
-		vertexList[0].visited = true;
+	public void bfs() {
+		vertexList[0].isVisited = true;
 		displayVertex(0);
-		theStack.push(0);
-		while(!theStack.isEmpty()) {
-			int v = getUnVisitedVertex(theStack.peek());
-			if(v == -1)
-				theStack.pop();
-			else {
-				vertexList[v].visited = true;
-				displayVertex(v);
-				theStack.push(v);
+		theQueue.add(0);
+		while(!theQueue.isEmpty()) {
+			int v1 = theQueue.remove();
+			int start = 0;
+			while(getUnvisitedVertex(v1, start) != -1) {
+				int v2 = getUnvisitedVertex(v1, start);
+				vertexList[v2].isVisited = true;
+				displayVertex(v2);
+				theQueue.add(v2);
+//				start += 1;  // 事实证明，加不加这个start没差，因为一旦访问了一个，其isVisited就被置为true
+							 // 不过这样做倒是提高了效率
 			}
 		}
 		// 遍历完之后将图恢复
 		for(int i = 0; i < vertexCount; i++)
-			vertexList[i].visited = false;
+			vertexList[i].isVisited = false;
 	}
 	
-	public int getUnVisitedVertex(int i) {
-		// TODO Auto-generated method stub
-		for(int j = 0; j < vertexCount; j++)
-			if(adjMatrix[i][j] == 1 && vertexList[j].visited == false)
+	public int getUnvisitedVertex(int v, int start) {
+		for(int j = start; j < vertexCount; j++)
+			if(adjMatrix[v][j]==1 && vertexList[j].isVisited==false)
 				return j;
-		// 如果该点i是末端的话或与点i相连的点都被访问过的话
 		return -1;
 	}
+	
 }
 
 class Vertex {
 	public char label;
-	public boolean visited;
-	
+	public boolean isVisited;
 	public Vertex(char lab) {
 		this.label = lab;
-		this.visited = false;
+		this.isVisited = false;
 	}
 }
