@@ -2,6 +2,9 @@ package Depth_first_Search;
 
 import java.util.Stack;
 
+/**
+ * 图为使用邻接矩阵的无向图(或者双向图)
+ */
 public class GraphDFS {
 	private final int maxVertices = 20;
 	private int adjMatrix[][];

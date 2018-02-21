@@ -3,6 +3,9 @@ package Breath_first_Search;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * 图为使用邻接矩阵的无向图(或者双向图)
+ */
 public class GraphBFS {
 	
 	private final int maxVertices = 20;
