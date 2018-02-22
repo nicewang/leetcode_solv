@@ -25,6 +25,8 @@ public class ListNode {
 		curNode = curNode.getNext();
 		ListNode node_new = node.InvertLinkedList(node);
 		node.ListLength(node_new);
+		node.DeleteFromLinkedList(node_new, 5);
+		node.InsertInLinkedList(node_new, new ListNode(3), 4);
 		System.out.println("hahaha");
 	}
 	
@@ -96,7 +98,7 @@ public class ListNode {
 		} else {
 			ListNode preNode = headNode;
 			int count = 1;
-			while(count < position) {
+			while(count < position-1) {
 				preNode = preNode.getNext();
 				count++;
 			}
