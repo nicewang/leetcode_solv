@@ -3,6 +3,9 @@ package shortest_path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 图为使用邻接表的单向图
+ */
 public class Graph {
 	
 	public List<Integer> listVertices;
