@@ -43,6 +43,13 @@ public class ClassOne {
 		in.close();
 	}
 
+	/**
+	 * case通过率60%
+	 * @param x
+	 * @param y
+	 * @param map
+	 * @return
+	 */
 	private static Stack<Integer> getBoundary(int[] x, int[] y, Map<Integer, Integer> map) {
 		// TODO Auto-generated method stub
 		Stack<Integer> theStack1 = new Stack<Integer>();

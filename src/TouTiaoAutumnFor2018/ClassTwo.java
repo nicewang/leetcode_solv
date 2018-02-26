@@ -1,6 +1,7 @@
 package TouTiaoAutumnFor2018;
 
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.Arrays;
 
 /**
@@ -41,6 +42,14 @@ public class ClassTwo {
 			System.out.println(result1);
 			int result2 = getMax(data);
 			System.out.println(result2);
+			int result3 = getMax_solv5(data);
+			System.out.println(result3);
+			int result4 = max2(data);
+			System.out.println(result4);
+			int result5 = getMax_solv1(data);
+			System.out.println(result5);
+			int result6 = get(data,0,n-1);
+			System.out.println(result6);
 		}
 		in.close();
 	}
@@ -86,6 +95,7 @@ public class ClassTwo {
 	/**
 	 * 拍脑袋想出来的方法
 	 * case通过率为70%
+	 * 时间复杂度为n方
 	 * @param list
 	 * @return
 	 */
@@ -145,6 +155,136 @@ public class ClassTwo {
 		} 
 		return max;
 	}
+	/**
+	 * 他人解法solv5
+	 * 和上面自己拍脑袋想的解法思想差不多，实现略有差别
+	 * 但少了标志位，实现更简单了，空间复杂度也减小了
+	 * 时间复杂度为n方
+	 * case全通过
+	 * @param data
+	 * @return
+	 */
+	private static int getMax_solv5(int[] data) {
+		// TODO Auto-generated method stub
+		int max = -1;
+		int len = data.length;
+		for(int i = 0; i < len; i++) {
+			int tmp = data[i];
+			//向左边查找-相加-查找，直至data[j]比data[i]小为止
+			for(int j = i-1; j >= 0; j--) {
+				if(data[j] < data[i])
+					break;
+				tmp += data[j];
+			}
+			//向右边查找-相加-查找，直至data[j]比data[i]小为止
+			for(int j = i+1; j < len; j++) {
+				if(data[j] < data[i])
+					break;
+				tmp += data[j];
+			}
+			max = Math.max(max, data[i]*tmp);
+		}
+		return max;
+	}
+	
+	/**
+	 * 堆栈实现
+	 * 不太看得懂的一种方法
+	 * 时间复杂度应该是在n和n方之间
+	 * 堆栈存放(从栈尾->头，出栈从栈头)的是从全局最小开始单调增加的局部最小(因而有些局部最小未必入栈)的index
+	 * 和最后一个元素的index
+	 * case全通过
+	 * @param arr
+	 * @return
+	 */
+	public static int max2(int[] arr) {
+        int size = arr.length;
+        int[] sums = new int[size];
+        sums[0] = arr[0];
+        for (int i = 1; i < size; i++) {
+            sums[i] = sums[i - 1] + arr[i];
+        }
+        int max = Integer.MIN_VALUE;
+        Stack<Integer> stack = new Stack<Integer>();
+        for (int i = 0; i < size; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                int j = stack.pop();
+                max = Math.max(max, (stack.isEmpty() ? sums[i - 1] : (sums[i - 1] - sums[stack.peek()])) * arr[j]);                
+            }
+            stack.push(i);
+        }
+        while (!stack.isEmpty()) {
+            int j = stack.pop();
+            max = Math.max(max, (stack.isEmpty() ? sums[size - 1] : (sums[size - 1] - sums[stack.peek()])) * arr[j]);
+        }
+        return max;
+    }
+	/**
+	 * 比较常规的实现
+	 * 把原数据拆分成n(n+1)/2个子集
+	 * 比较聪明的是拆分子集时就进行求和与比较
+	 * 因而时间复杂度还是为n方
+	 * case全通过
+	 * @param nums
+	 * @return
+	 */
+	private static int getMax_solv1(int[] nums) {
+		// TODO Auto-generated method stub
+		int res = Integer.MIN_VALUE;
+        for(int i = 0; i < nums.length; i++){
+            int tRes = nums[i] * nums[i];
+            int sum = nums[i], min = nums[i];
+            for(int j = i + 1; j < nums.length; j++){
+                sum += nums[j];
+                min = Math.min(min, nums[j]);
+                tRes = Math.max(tRes, sum * min);
+                // 这一步很聪明，根据题目要求，最小值为0，因而有0出现是直接返回就好
+                if(min == 0){
+                    return 0;
+                }
+            }          
+            res = Math.max(res, tRes);
+        }
+		return res;
+	}
+	
+	/**
+	 * 类似于堆栈实现方式
+	 * case全通过
+	 * @param a
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public static int get(int[] a,int from,int to){
+        if(to==from){
+            return a[from]*a[to];
+        }
+        else if(to<from){
+            return 0;
+        }
+        else{
+            int index=findIndex(a,from,to);
+            int left=get(a,from,index-1);
+            int right=get(a,index+1,to);
+            int sum=0;
+            for(int i=from;i<=to;i++){
+                sum+=a[i];
+            }
+            return sum*a[index]>left?(sum*a[index]>right?sum*a[index]:right):(right<left?left:right);
+        }
+    }
+	
+    private static int findIndex(int[] a,int from,int to) {
+        // TODO Auto-generated method stub
+        int min=from;
+        for(int i=from;i<=to;i++){
+            if(a[i]<a[min]){
+                min=i;
+            }
+        }
+        return min;
+    }
 	
 	public static void insertSort_index(int[] index_list, int[] input) {
 		for(int i = 1; i < input.length; i++) {
