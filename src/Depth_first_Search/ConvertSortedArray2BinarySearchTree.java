@@ -159,7 +159,7 @@ public class ConvertSortedArray2BinarySearchTree {
 		}
 	}
 	
-	// 前序遍历
+	// 前序(先根)遍历
 	public static void preOrder(TreeNode node) {
 		if(node != null) {
 			System.out.println(node.val);

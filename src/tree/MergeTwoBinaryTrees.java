@@ -31,7 +31,7 @@ public class MergeTwoBinaryTrees {
 	
 	/**
 	 * 就相当于一个二叉树的遍历
-	 * 这里用的是中序遍历
+	 * 这里用的是先根遍历
 	 * @param t1
 	 * @param t2
 	 * @return
