@@ -67,6 +67,7 @@ public class MaxDepOfNaryTree {
             visitedStack.pop();
             visitedStack.push(true);
             Node tmp = theStack.peek();
+            System.out.println(tmp.val);
             if(tmp.children == null) {
                 max_depth = max_depth > depth.peek() ? max_depth : depth.peek();
                 theStack.pop();
@@ -76,7 +77,7 @@ public class MaxDepOfNaryTree {
             }
             List<Node> node_list = tmp.children;
             int tmp_depth = depth.peek();
-            for(int i = 0; i < node_list.size(); i++) {
+            for(int i = node_list.size() - 1; i >= 0; i--) {
                 Node node_new = node_list.get(i);
                 theStack.push(node_new);
                 visitedStack.push(false);
