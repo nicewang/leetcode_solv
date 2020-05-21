@@ -88,6 +88,7 @@ public class P18FourSum {
                         int curr=nums[k]+nums[i]+nums[j]+nums[h];
                         if(curr==target){
                             result.add(Arrays.asList(nums[k],nums[i],nums[j],nums[h]));
+                            // TODO 对比这里j++、h--的位置和3sum的区别
                             j++;
                             while(j<h&&nums[j]==nums[j-1]){
                                 j++;

@@ -73,18 +73,64 @@
 
 
 package leetcode.leetcode.editor.en;
+
 //Java：String to Integer (atoi)
-public class P8StringToIntegerAtoi{
+public class P8StringToIntegerAtoi {
     public static void main(String[] args) {
         Solution solution = new P8StringToIntegerAtoi().new Solution();
+        System.out.println(solution.myAtoi("9223372036854775808"));
         // TO TEST
     }
+
     //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {
-    public int myAtoi(String str) {
-        return -1;
+    class Solution {
+        // 2ms 39.9MB
+        public int myAtoi(String str) {
+            long res = 0;
+            boolean isStarted = false;
+            boolean isNegative = false;
+            boolean numStart = false;
+            int symbol_cnt = 0;
+            for (int i = 0; i < str.length(); i++) {
+                if (!isStarted && str.charAt(i) == ' ') {
+                    continue;
+                }
+                int tmp = str.charAt(i) - '0';
+                if ((tmp >= 0 && tmp <= 9) || str.charAt(i) == '+' || str.charAt(i) == '-') {
+                    isStarted = true;
+                    if (str.charAt(i) == '-') {
+                        symbol_cnt++;
+                        if (symbol_cnt > 1 || numStart) {
+                            break;
+                        }
+                        isNegative = true;
+                        continue;
+                    } else if (str.charAt(i) == '+') {
+                        symbol_cnt++;
+                        if (symbol_cnt > 1 || numStart) {
+                            break;
+                        }
+                        continue;
+                    }
+                    numStart = true;
+                    res = res * 10 + tmp;
+                    if(!isNegative && res > Integer.MAX_VALUE) {
+                        return Integer.MAX_VALUE;
+                    }
+                    if(isNegative && (-res) < Integer.MIN_VALUE) {
+                        return Integer.MIN_VALUE;
+                    }
+                } else {
+                    break;
+                }
+            }
+            if (isNegative) {
+                res = -res;
+            }
+
+            return (int) res;
+        }
     }
-}
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

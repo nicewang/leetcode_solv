@@ -50,6 +50,7 @@ public class P43MultiplyStrings {
                     int n2 = num2.charAt(j) - '0';
                     int sum = (res[i + j + 1] + n1 * n2);
                     res[i + j + 1] = sum % 10;
+                    // 进位
                     res[i + j] += sum / 10;
                 }
             }
