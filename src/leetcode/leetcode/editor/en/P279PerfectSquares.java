@@ -36,7 +36,6 @@ public class P279PerfectSquares {
     class Solution {
 
         // 解法四：贪心+BFS 52ms 39.6MB
-        // TODO 多看几遍解答 理解
         public int numSquares(int n) {
             // TODO 这里必须用ArrayList 否则解答错误 why？！
             ArrayList<Integer> squareNums = new ArrayList<>();

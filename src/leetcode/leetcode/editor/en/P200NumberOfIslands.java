@@ -30,6 +30,9 @@
 
 package leetcode.leetcode.editor.en;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 //Java：Number of Islands
 public class P200NumberOfIslands {
     public static void main(String[] args) {
@@ -41,10 +44,52 @@ public class P200NumberOfIslands {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        // 解法一：dfs递归 4ms 42.2MB
-        // TODO BFS
-        boolean newIsland = false;
+        // TODO 并查集解法
+        // 解法二：bfs 6ms 42.5MB 时间复杂度O(MN) 空间复杂度O(min(M,N))
         public int numIslands(char[][] grid) {
+            if(grid == null || grid.length == 0) {
+                return 0;
+            }
+            int nr = grid.length;
+            int nc = grid[0].length;
+            int numsIsland = 0;
+            for(int r = 0; r < nr; r++) {
+                for(int c = 0; c < nc; c++) {
+                    if(grid[r][c] == '1') {
+                        numsIsland++;
+                        grid[r][c] = '0';
+                        Queue<Integer> queue = new LinkedList<>();
+                        queue.add(r*nc+c);
+                        while(!queue.isEmpty()) {
+                            int id = queue.remove();
+                            int row = id / nc;
+                            int col = id % nc;
+                            if(row-1 >= 0 && grid[row-1][col] == '1') {
+                                grid[row-1][col] = '0';
+                                queue.add(nc*(row-1)+col);
+                            }
+                            if(row+1 < nr && grid[row+1][col] == '1') {
+                                grid[row+1][col] = '0';
+                                queue.add(nc*(row+1)+col);
+                            }
+                            if(col-1 >= 0 && grid[row][col-1] == '1') {
+                                grid[row][col-1] = '0';
+                                queue.add(nc*row+col-1);
+                            }
+                            if(col+1 < nc && grid[row][col+1] == '1') {
+                                grid[row][col+1] = '0';
+                                queue.add(nc*row+col+1);
+                            }
+                        }
+                    }
+
+                }
+            }
+            return numsIsland;
+        }
+        // 解法一：dfs递归 4ms 42.2MB 时间复杂度O(MN) 空间复杂度O(MN)
+        boolean newIsland = false;
+        public int numIslandsOne(char[][] grid) {
             if (grid == null || grid.length <= 0 || grid[0].length <= 0) {
                 return 0;
             }

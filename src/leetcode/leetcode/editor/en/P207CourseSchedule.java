@@ -59,7 +59,7 @@ public class P207CourseSchedule{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     //  解法一：dfs 3ms  39.6MB
-    // TODO 注释及bfs解法
+    // TODO 注释及bfs TopSort解法
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         // adjacent[i]即为i的邻边列表
         List<List<Integer>> adjacent = new ArrayList<>();
