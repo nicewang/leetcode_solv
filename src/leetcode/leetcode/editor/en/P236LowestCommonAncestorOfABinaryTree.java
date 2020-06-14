@@ -104,9 +104,27 @@ public class P236LowestCommonAncestorOfABinaryTree {
             return resNode;
         }
 
-        // 解法一：堆栈方法 超时
-        // TODO 看答案
+        // 解法二：dfs递归 TODO attention：dfs可以优先考虑递归 后续再考虑堆栈 另外递归的问题想一下是否可以转化为dp问题
+        // 8ms 41.9MB 时间复杂度O(N) 空间复杂度O(N) N——二叉树的节点数
+        TreeNode res = null;
         public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+            dfs(root, p, q);
+            return res;
+        }
+        private boolean dfs(TreeNode root, TreeNode p, TreeNode q) {
+            if(root == null) {
+                return false;
+            }
+            boolean l = dfs(root.left, p , q);
+            boolean r = dfs(root.right, p , q);
+            if((l && r) || ((root.val == p.val || root.val == q.val) && (l || r))) {
+                res = root;
+            }
+            return root.val == p.val || root.val == q.val || l || r;
+        }
+
+        // 解法一：堆栈方法 超时
+        public TreeNode lowestCommonAncestorOne(TreeNode root, TreeNode p, TreeNode q) {
             Stack<TreeNode> pStack = new Stack<>();
             Stack<TreeNode> qStack = new Stack<>();
             int deep_p = 0, deep_q = 0;

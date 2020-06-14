@@ -53,20 +53,59 @@
 
 package leetcode.leetcode.editor.en;
 
-import java.util.List;
+import javafx.util.Pair;
+
+import java.util.*;
 
 //Java：Word Ladder
-public class P127WordLadder{
+public class P127WordLadder {
     public static void main(String[] args) {
         Solution solution = new P127WordLadder().new Solution();
         // TO TEST
     }
+
     //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {
-    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        return -1;
+    class Solution {
+        // 1955ms 47.3MB
+        // TODO 脑子不昏时写一下双向BFS解法
+        public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+            if (wordList == null || wordList.size() == 0) {
+                return 0;
+            }
+            int l = beginWord.length();
+            HashMap<String, List<String>> allComboDict = new HashMap<>();
+            wordList.forEach(word -> {
+                for (int i = 0; i < l; i++) {
+                    String newWord = word.substring(0, i) + "*" + word.substring(i + 1, l);
+                    List<String> comboList = allComboDict.getOrDefault(newWord, new ArrayList<>());
+                    comboList.add(word);
+                    allComboDict.put(newWord, comboList);
+                }
+            });
+            List<String> visited = new ArrayList<>();
+            Queue<Pair<String, Integer>> q = new LinkedList<>();
+            q.add(new Pair<>(beginWord, 1));
+            visited.add(beginWord);
+            while (!q.isEmpty()) {
+                Pair<String, Integer> p = q.remove();
+                String word = p.getKey();
+                int level = p.getValue();
+                for (int i = 0; i < l; i++) {
+                    String newWord = word.substring(0, i) + "*" + word.substring(i + 1, l);
+                    for (String adjacent : allComboDict.getOrDefault(newWord, new ArrayList<>())) {
+                        if (adjacent.equals(endWord)) {
+                            return level + 1;
+                        }
+                        if (!visited.contains(adjacent)) {
+                            visited.add(adjacent);
+                            q.add(new Pair<>(adjacent, level + 1));
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
     }
-}
 //leetcode submit region end(Prohibit modification and deletion)
 
 }

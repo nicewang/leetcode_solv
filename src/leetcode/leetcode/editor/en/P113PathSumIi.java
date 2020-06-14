@@ -30,10 +30,7 @@
 
 package leetcode.leetcode.editor.en;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 //Java：Path Sum II
 public class P113PathSumIi {
@@ -95,43 +92,31 @@ public class P113PathSumIi {
             return resNode;
         }
 
-        // TODO 最后一个用例执行出错 看答案
+        // 2ms 40.1MB
+        List<List<Integer>> result = new LinkedList<>();
+        Stack<Integer> stack = new Stack<>();
         public List<List<Integer>> pathSum(TreeNode root, int sum) {
-            List<List<Integer>> list = new ArrayList<>();
-            List<Integer> list_now = new ArrayList<>();
-            if (root == null) {
-                return list;
+            List<Integer> curPath = new LinkedList<>();
+            if(root == null) {
+                return result;
             }
-            find(root, sum, 0, list, list_now, 0);
-            return list;
+            stack.push(root.val);
+            find(root, 0, sum);
+            return result;
         }
-
-        private void find(TreeNode root, int sum, int sum_now, List<List<Integer>> list, List<Integer> list_now, int depth) {
-            sum_now = sum_now + root.val;
-            if (list_now.size() > depth) {
-                for(int i = depth; i < list_now.size(); i++) {
-                    list_now.remove(depth);
-                }
+        private void find(TreeNode root, int curSum,  int sum) {
+            if(curSum+root.val == sum && root.left == null && root.right == null) {
+                result.add(new ArrayList<>(stack));
             }
-            list_now.add(depth, root.val);
-            if (root.left == null && root.right == null) {
-                if (sum_now == sum) {
-                    List<Integer> list_tmp = new ArrayList<>(list_now);
-                    for(int i = depth+1; i < list_tmp.size(); i++) {
-                        list_tmp.remove(i);
-                    }
-                    list.add(list_tmp);
-                }
-                for(int i = depth; i < list_now.size(); i++) {
-                    list_now.remove(i);
-                }
-                return;
+            if(root.left != null) {
+                stack.push(root.left.val);
+                find(root.left, curSum+root.val, sum);
+                stack.pop();
             }
-            if (root.left != null) {
-                find(root.left, sum, sum_now, list, list_now, depth + 1);
-            }
-            if (root.right != null) {
-                find(root.right, sum, sum_now, list, list_now, depth + 1);
+            if(root.right != null) {
+                stack.push(root.right.val);
+                find(root.right, curSum+root.val, sum);
+                stack.pop();
             }
         }
     }
