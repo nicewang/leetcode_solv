@@ -62,7 +62,6 @@ public class P142LinkedListCycleIi{
 
     public class Solution {
         // 5ms 41.1MB
-        // TODO Floyd 算法 检测环
         public ListNode detectCycle(ListNode head) {
             if (head == null) {
                 return null;
@@ -76,6 +75,50 @@ public class P142LinkedListCycleIi{
                 visited.add(curNode);
                 curNode = curNode.next;
             }
+            return null;
+        }
+
+        // 解法二：Floyd算法 0ms 39.6MB TODO 可以多看一下数学证明 还挺有意思的
+        public ListNode detectCycleTwo(ListNode head) {
+            if (head == null) {
+                return null;
+            }
+
+            // If there is a cycle, the fast/slow pointers will intersect at some
+            // node. Otherwise, there is no cycle, so we cannot find an e***ance to
+            // a cycle.
+            ListNode intersect = getIntersect(head);
+            if (intersect == null) {
+                return null;
+            }
+
+            // To find the e***ance to the cycle, we have two pointers traverse at
+            // the same speed -- one from the front of the list, and the other from
+            // the point of intersection.
+            ListNode ptr1 = head;
+            ListNode ptr2 = intersect;
+            while (ptr1 != ptr2) {
+                ptr1 = ptr1.next;
+                ptr2 = ptr2.next;
+            }
+
+            return ptr1;
+        }
+
+        private ListNode getIntersect(ListNode head) {
+            ListNode tortoise = head;
+            ListNode hare = head;
+
+            // A fast pointer will either loop around a cycle and meet the slow
+            // pointer or reach the `null` at the end of a non-cyclic list.
+            while (hare != null && hare.next != null) {
+                tortoise = tortoise.next;
+                hare = hare.next.next;
+                if (tortoise == hare) {
+                    return tortoise;
+                }
+            }
+
             return null;
         }
     }

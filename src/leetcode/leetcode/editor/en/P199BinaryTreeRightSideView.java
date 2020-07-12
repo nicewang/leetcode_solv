@@ -158,12 +158,12 @@ public class P199BinaryTreeRightSideView {
             Stack<Integer> depthStack = new Stack<>();
             stack.push(root);
             depthStack.push(0);
-            int maxDepth = -1;
+//            int maxDepth = -1;
             List<Integer> depthList = new ArrayList<>();
             while(!stack.isEmpty()) {
                 TreeNode node = stack.pop();
                 int depth = depthStack.pop();
-                maxDepth = Math.max(maxDepth, depth);
+//                maxDepth = Math.max(maxDepth, depth);
                 // 如果不存在对应深度的节点我们才插入
                 if(!depthList.contains(depth)) {
                     depthList.add(depth, depth);
@@ -192,11 +192,11 @@ public class P199BinaryTreeRightSideView {
             LinkedList<Integer> depthQueue = new LinkedList<>();
             queue.add(root);
             depthQueue.push(0);
-            int maxDepth = -1;
+//            int maxDepth = -1;
             while(!queue.isEmpty()) {
                 TreeNode node = queue.remove();
                 int depth = depthQueue.remove();
-                maxDepth = Math.max(maxDepth, depth);
+//                maxDepth = Math.max(maxDepth, depth);
                 if(list.size() > depth) {
                     list.remove(depth);
                 }

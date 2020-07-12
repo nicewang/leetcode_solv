@@ -59,6 +59,7 @@ public class P139WordBreak {
 
         // 解法四：动态规划 10ms 40.1MB 时间复杂度O(n^2) 空间复杂度O(n)
         public boolean wordBreak(String s, List<String> wordDict) {
+            // 字符串长度为i的子串能通过wordDict拼接出来
             boolean[] dp = new boolean[s.length()+1];
             dp[0] = true;
             for(int i = 1; i <= s.length(); i++) {

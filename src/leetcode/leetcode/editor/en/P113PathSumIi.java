@@ -96,7 +96,6 @@ public class P113PathSumIi {
         List<List<Integer>> result = new LinkedList<>();
         Stack<Integer> stack = new Stack<>();
         public List<List<Integer>> pathSum(TreeNode root, int sum) {
-            List<Integer> curPath = new LinkedList<>();
             if(root == null) {
                 return result;
             }

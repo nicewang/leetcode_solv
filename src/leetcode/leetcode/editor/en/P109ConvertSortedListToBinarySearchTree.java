@@ -38,7 +38,6 @@ public class P109ConvertSortedListToBinarySearchTree{
 class Solution {
     // 2ms 41MB
     public TreeNode sortedListToBST(ListNode head) {
-        TreeNode treeNode = new TreeNode(-1);
         List<Integer> sortedList = transferListNodeToList(head);
         if(sortedList.size() == 0) {
             return null;
