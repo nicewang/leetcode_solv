@@ -48,7 +48,7 @@ class Solution {
         if(start > end) {
             return null;
         }
-        int mid = start + (end - start) / 2;
+        int mid = (start + end) / 2;
         TreeNode treeNode = new TreeNode(list.get(mid));
         treeNode.left = buildBST(start, mid - 1, list);
         treeNode.right = buildBST(mid + 1, end, list);
