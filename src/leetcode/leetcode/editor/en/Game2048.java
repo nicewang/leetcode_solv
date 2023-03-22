@@ -1,206 +1,228 @@
 package leetcode.leetcode.editor.en;
 
-import javax.swing.*;
+//修改这个2048游戏代码中的逻辑错误bug
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+import javax.swing.*;
 
 public class Game2048 extends JFrame implements KeyListener {
-    private static final long serialVersionUID = 1L;
+
     private static final int ROWS = 4;
     private static final int COLS = 4;
-    private static final int CELL_SIZE = 128;
+    private static final int TILE_SIZE = 128;
     private static final int GAP = 16;
-    private static final Font FONT = new Font("Arial", Font.BOLD, 64);
-    private static final Color[] COLORS = {new Color(0xEEE4DA), new Color(0xEDE0C8), new Color(0xF2B179),
-            new Color(0xF59563), new Color(0xF67C5F), new Color(0xF65E3B),
-            new Color(0xEDCF72), new Color(0xEDCC61), new Color(0xEDC850),
-            new Color(0xEDC53F), new Color(0xEDC22E), new Color(0x3C3A32)};
-    private static final int[] VALUES = {0, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
-    private int[][] grid;
-    private JLabel[][] cells;
+
+    private int[][] board;
+    private JLabel[][] tiles;
+    private JLabel scoreLabel;
+    private int score;
 
     public Game2048() {
-        setTitle("2048");
+        board = new int[ROWS][COLS];
+        tiles = new JLabel[ROWS][COLS];
+        score = 0;
+
+        setTitle("2048 Game");
         setResizable(false);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        addKeyListener(this);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel gridPanel = new JPanel(new GridLayout(ROWS, COLS, GAP, GAP));
-        gridPanel.setBackground(new Color(0xBBADA0));
-        getContentPane().add(gridPanel);
+        JPanel contentPane = new JPanel();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
+        contentPane.setBackground(new Color(0xbbada0));
+        add(contentPane);
 
-        cells = new JLabel[ROWS][COLS];
+        JPanel boardPanel = new JPanel();
+        boardPanel.setLayout(new GridLayout(ROWS, COLS, GAP, GAP));
+        boardPanel.setBackground(new Color(0xbbada0));
+        contentPane.add(boardPanel, BorderLayout.CENTER);
+
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                cells[row][col] = new JLabel("", SwingConstants.CENTER);
-                cells[row][col].setFont(FONT);
-                cells[row][col].setOpaque(true);
-                cells[row][col].setBackground(COLORS[0]);
-                cells[row][col].setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
-                gridPanel.add(cells[row][col]);
+                tiles[row][col] = new JLabel("", SwingConstants.CENTER);
+                tiles[row][col].setPreferredSize(new Dimension(TILE_SIZE, TILE_SIZE));
+                tiles[row][col].setFont(new Font("SansSerif", Font.BOLD, 48));
+                tiles[row][col].setOpaque(true);
+                tiles[row][col].setBackground(getTileColor(0));
+                boardPanel.add(tiles[row][col]);
             }
         }
 
+        scoreLabel = new JLabel("Score: 0");
+        scoreLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        scoreLabel.setForeground(Color.WHITE);
+        contentPane.add(scoreLabel, BorderLayout.NORTH);
+
+        generateTile();
+        generateTile();
+
+        addKeyListener(this);
         pack();
         setLocationRelativeTo(null);
-
-        newGame();
+        setVisible(true);
     }
 
-    private void newGame() {
-        grid = new int[ROWS][COLS];
-        addRandomTile();
-        addRandomTile();
-        updateGrid();
+    private void generateTile() {
+        int value = Math.random() < 0.9 ? 2 : 4;
+        int row, col;
+        do {
+            row = (int) (Math.random() * ROWS);
+            col = (int) (Math.random() * COLS);
+        } while (board[row][col] != 0);
+        board[row][col] = value;
+        tiles[row][col].setText(Integer.toString(value));
+        tiles[row][col].setBackground(getTileColor(value));
     }
 
-    private void addRandomTile() {
-        ArrayList<Point> emptyCells = new ArrayList<Point>();
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
-                if (grid[row][col] == 0) {
-                    emptyCells.add(new Point(row, col));
-                }
-            }
+    private Color getTileColor(int value) {
+        switch (value) {
+            case 2:
+                return new Color(0xeee4da);
+            case 4:
+                return new Color(0xede0c8);
+            case 8:
+                return new Color(0xf2b179);
+            case 16:
+                return new Color(0xf59563);
+            case 32:
+                return new Color(0xf67c5f);
+            case 64:
+                return new Color(0xf65e3b);
+            case 128:
+                return new Color(0xedcf72);
+            case 256:
+                return new Color(0xedcc61);
+            case 512:
+                return new Color(0xedc850);
+            case 1024:
+                return new Color(0xedc53f);
+            case 2048:
+                return new Color(0xedc22e);
+            default:
+                return new Color(0xcdc1b4);
         }
-        if (emptyCells.isEmpty()) {
-            return;
-        }
-        Point p = emptyCells.get((int) (Math.random() * emptyCells.size()));
-        grid[p.x][p.y] = (Math.random() < 0.9) ? 2 : 4;
     }
 
-    private void updateGrid() {
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
-                cells[row][col].setText(grid[row][col] == 0 ? "" : String.valueOf(grid[row][col]));
-                cells[row][col].setBackground(COLORS[getIndexForValue(grid[row][col])]);
-            }
-        }
-        pack();
-    }
-
-    private int getIndexForValue(int value) {
-        for (int i = 0; i < VALUES.length; i++) {
-            if (VALUES[i] == value) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    private void moveTilesLeft() {
+    private boolean moveTiles(int dx, int dy) {
         boolean moved = false;
+        int[][] newBoard = new int[ROWS][COLS];
         for (int row = 0; row < ROWS; row++) {
-            int[] line = grid[row];
-            int[] merged = mergeTiles(line);
-            if (!Arrays.equals(line, merged)) {
-                grid[row] = merged;
-                moved = true;
+            for (int col = 0; col < COLS; col++) {
+                int newRow = row + dy;
+                int newCol = col + dx;
+                if (board[row][col] != 0) {
+                    while (newRow >= 0 && newRow < ROWS && newCol >= 0 && newCol < COLS && newBoard[newRow][newCol] == 0) {
+                        newRow += dy;
+                        newCol += dx;
+                    }
+                    newRow -= dy;
+                    newCol -= dx;
+                    if (newRow != row || newCol != col) {
+                        moved = true;
+                    }
+                    if (newBoard[newRow][newCol] == 0) {
+                        newBoard[newRow][newCol] = board[row][col];
+                    } else {
+                        newBoard[newRow][newCol] *= 2;
+                        score += newBoard[newRow][newCol];
+                        moved = true;
+                    }
+                }
             }
         }
         if (moved) {
-            addRandomTile();
-            updateGrid();
+            board = newBoard;
+            updateTiles();
+            scoreLabel.setText("Score: " + score);
+            if (isGameOver()) {
+                JOptionPane.showMessageDialog(this, "Game over!");
+                resetGame();
+            } else {
+                generateTile();
+            }
         }
+        return moved;
     }
 
-    private void moveTilesRight() {
-        grid = reverseGrid(grid);
-        moveTilesLeft();
-        grid = reverseGrid(grid);
-    }
-
-    private void moveTilesUp() {
-        grid = transposeGrid(grid);
-        moveTilesLeft();
-        grid = transposeGrid(grid);
-    }
-
-    private void moveTilesDown() {
-        grid = transposeGrid(grid);
-        moveTilesRight();
-        grid = transposeGrid(grid);
-    }
-
-    private int[] mergeTiles(int[] line) {
-        int[] merged = new int[COLS];
-        int mergeIndex = 0;
-        boolean canMerge = false;
-        for (int value : line) {
-            if (value != 0) {
-                if (merged[mergeIndex] == 0) {
-                    merged[mergeIndex] = value;
-                } else if (merged[mergeIndex] == value && canMerge) {
-                    merged[mergeIndex] *= 2;
-                    canMerge = false;
-                } else {
-                    mergeIndex++;
-                    merged[mergeIndex] = value;
-                    canMerge = true;
+    private boolean isGameOver() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (board[row][col] == 0) {
+                    return false;
+                }
+                if (col < COLS - 1 && board[row][col] == board[row][col + 1]) {
+                    return false;
+                }
+                if (row < ROWS - 1 && board[row][col] == board[row + 1][col]) {
+                    return false;
                 }
             }
         }
-        return merged;
+        return true;
     }
 
-    private int[][] reverseGrid(int[][] grid) {
-        int[][] newGrid = new int[ROWS][COLS];
+    private void updateTiles() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                newGrid[row][col] = grid[row][COLS - 1 - col];
+                tiles[row][col].setText(board[row][col] == 0 ? "" : Integer.toString(board[row][col]));
+                tiles[row][col].setBackground(getTileColor(board[row][col]));
             }
         }
-        return newGrid;
     }
 
-    private int[][] transposeGrid(int[][] grid) {
-        int[][] newGrid = new int[COLS][ROWS];
+    private void resetGame() {
+        score = 0;
+        scoreLabel.setText("Score: 0");
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                newGrid[col][row] = grid[row][col];
+                board[row][col] = 0;
+                tiles[row][col].setText("");
+                tiles[row][col].setBackground(getTileColor(0));
             }
         }
-        return newGrid;
+        generateTile();
+        generateTile();
     }
 
-    @Override
     public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        switch (keyCode) {
-            case KeyEvent.VK_LEFT:
-                moveTilesLeft();
-                break;
-            case KeyEvent.VK_RIGHT:
-                moveTilesRight();
-                break;
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                moveTilesUp();
+                moveTiles(0, -1);
                 break;
             case KeyEvent.VK_DOWN:
-                moveTilesDown();
+                moveTiles(0, 1);
                 break;
-            default:
+            case KeyEvent.VK_LEFT:
+                moveTiles(-1, 0);
+                break;
+            case KeyEvent.VK_RIGHT:
+                moveTiles(1, 0);
+                break;
+            case KeyEvent.VK_R:
+                resetGame();
                 break;
         }
     }
 
-    @Override
     public void keyReleased(KeyEvent e) {
     }
 
-    @Override
     public void keyTyped(KeyEvent e) {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Game2048 game = new Game2048();
-                game.setVisible(true);
-            }
-        });
+        JFrame frame = new JFrame();
+        frame.setTitle("2048");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(340, 400);
+        frame.setResizable(false);
+
+        Game2048 game = new Game2048();
+        frame.add(game);
+
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
     }
+
 }
