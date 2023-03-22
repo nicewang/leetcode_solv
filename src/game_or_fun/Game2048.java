@@ -1,4 +1,4 @@
-package leetcode.leetcode.editor.en.game_or_fun;
+package game_or_fun;
 
 //修改这个2048游戏代码中的逻辑错误bug
 import java.awt.*;

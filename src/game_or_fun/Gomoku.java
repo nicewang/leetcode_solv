@@ -1,4 +1,4 @@
-package leetcode.leetcode.editor.en.game_or_fun;
+package game_or_fun;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

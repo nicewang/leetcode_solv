@@ -1,4 +1,4 @@
-package leetcode.leetcode.editor.en.game_or_fun;
+package game_or_fun;
 
 import javax.swing.*;
 import java.awt.*;
