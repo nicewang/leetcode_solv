@@ -24,27 +24,18 @@ public class P2AddTwoNumbers{
     public static void main(String[] args) {
         Solution solution = new P2AddTwoNumbers().new Solution();
         // TO TEST
-        ListNode l0 = new P2AddTwoNumbers().new ListNode(3);
-        l0.next = new P2AddTwoNumbers().new ListNode(9);
+        ListNode l0 = new P2AddTwoNumbers().new ListNode(2);
+        l0.next = new P2AddTwoNumbers().new ListNode(4);
         ListNode l1 = l0.next;
         l1.next = new P2AddTwoNumbers().new ListNode(9);
-        l1 = l1.next;
-        l1.next = new P2AddTwoNumbers().new ListNode(9);
-        l1 = l1.next;
-        l1.next = new P2AddTwoNumbers().new ListNode(9);
-        l1 = l1.next;
-        l1.next = new P2AddTwoNumbers().new ListNode(9);
-        l1 = l1.next;
-        l1.next = new P2AddTwoNumbers().new ListNode(9);
-        l1 = l1.next;
-        l1.next = new P2AddTwoNumbers().new ListNode(9);
-        l1 = l1.next;
-        l1.next = new P2AddTwoNumbers().new ListNode(9);
-        l1 = l1.next;
-        l1.next = new P2AddTwoNumbers().new ListNode(9);
-        ListNode l2 = new P2AddTwoNumbers().new ListNode(7);
-        ListNode l3 = solution.addTwoNumbers(l0, l2);
-        System.out.println(l3.toString());
+        ListNode l2 = new P2AddTwoNumbers().new ListNode(5);
+        l2.next = new P2AddTwoNumbers().new ListNode(6);
+        ListNode l3 = l2.next;
+        l3.next = new P2AddTwoNumbers().new ListNode(4);
+        l3 = l3.next;
+        l3.next = new P2AddTwoNumbers().new ListNode(9);
+        ListNode l4 = solution.addTwoNumbers(l0, l2);
+        System.out.println(l4.toString());
     }
 
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -69,51 +60,87 @@ class Solution {
         }
         p1 = len1>len2?l1:l2;
         p2 = len1>len2?l2:l1;
-        resultNode = addListNode(p1,p2,Math.abs(len1-len2));
-        if(carry > 0) {
-            ListNode tmp = new ListNode(carry);
-            tmp.next = resultNode;
-            resultNode = tmp;
-        }
+//        resultNode = addListNode(p1,p2,Math.abs(len1-len2));
+        // a detail of problem had changed laterly, so use this
+        resultNode = addListNode(p1,p2,Math.min(len1,len2));
+//        if(carry > 0) {
+//            ListNode tmp = new ListNode(carry);
+//            tmp.next = resultNode;
+//            resultNode = tmp;
+//        }
+
+
         return resultNode;
     }
 
     private ListNode addListNode(ListNode l1, ListNode l2, int len) {
         ListNode resultNode;
         // 返回条件，当两个链表到达最尾端，也就是低位对齐时，创建新的节点返回
+        // a detail of problem had changed laterly, so use this
+        if (l1.next == null && l2 == null) {
+            resultNode = new ListNode((l1.val + carry) % 10);
+            carry = (l1.val + carry) / 10;
+            if (carry > 0) {
+                resultNode.next = new ListNode(carry);
+            }
+            return resultNode;
+        } // a detail of problem had changed laterly, so use this
+
         if(l1.next == null && l2.next == null) {
+//            resultNode = new ListNode((l1.val + l2.val + carry) % 10);
+//            carry = (l1.val + l2.val + carry) / 10;
+//            return resultNode;
+
+            // a detail of problem had changed laterly, so use this
             resultNode = new ListNode((l1.val + l2.val + carry) % 10);
             carry = (l1.val + l2.val + carry) / 10;
-            return resultNode;
+            if (carry > 0) {
+                resultNode.next = new ListNode(carry);
+            }
+            return resultNode; // a detail of problem had changed laterly, so use this
         }
         /*
          * 如果len==0 说明链表此时已经对齐,因此递归调用helper，同时两个链表同时传入next，返回值为已经构造好的低位结果链表
          * 此时l1,l2对齐，因此(l1.val+l2.val+flag)%10表示当前位结果
          */
         if(len == 0) {
-            resultNode = addListNode(l1.next, l2.next, len);
-            ListNode tmp = new ListNode((l1.val + l2.val + carry) % 10);
-            carry = (l1.val + l2.val + carry) / 10;
+//            resultNode = addListNode(l1.next, l2.next, len);
+//            ListNode tmp = new ListNode((l1.val + l2.val + carry) % 10);
+//            carry = (l1.val + l2.val + carry) / 10;
+//            tmp.next = resultNode;
+//            resultNode = tmp;
+
+            // a detail of problem had changed laterly, so use this
+            ListNode tmp = new ListNode((l1.val + carry) % 10);
+            carry = (l1.val + carry) / 10;
+            resultNode = addListNode(l1.next, l2, len);
             tmp.next = resultNode;
-            resultNode = tmp;
+            resultNode = tmp; // a detail of problem had changed laterly, so use this
         }
         /*
          * 如果len！=0 说明此时链表还没有对齐，因此递归调用helper，传入较长链表l1.next，返回值为已经构造好的低位结果链表
          * 此时由于l2较短，因此(l1.val+flag)%10表示当前位结果
          */
         else {
-            resultNode = addListNode(l1.next, l2, len-1);
-            ListNode tmp = new ListNode((l1.val + carry) % 10);
-            carry = (l1.val + carry) / 10;
+//            resultNode = addListNode(l1.next, l2, len-1);
+//            ListNode tmp = new ListNode((l1.val + carry) % 10);
+//            carry = (l1.val + carry) / 10;
+//            tmp.next = resultNode;
+//            resultNode = tmp;
+
+            // a detail of problem had changed laterly, so use this
+            ListNode tmp = new ListNode((l1.val + l2.val + carry) % 10);
+            carry = (l1.val + l2.val + carry) / 10;
+            resultNode = addListNode(l1.next, l2.next, len-1);
             tmp.next = resultNode;
-            resultNode = tmp;
+            resultNode = tmp; // a detail of problem had changed laterly, so use this
         }
         return resultNode;
     }
 
     // 解法2：链表反转 相加 再链表反转 避免大数问题
     // 3ms 40MB
-    public ListNode addTwoNumbersTwo(ListNode l1, ListNode l2) {
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
         return listNodeAdd(reverseListNodeOne(l1), reverseListNodeOne(l2));
     }
 
@@ -171,7 +198,7 @@ class Solution {
 
     // 解法1：使用堆栈解法 避免大数问题
     // 6ms 40MB
-    public ListNode addTwoNumbersOne(ListNode l1, ListNode l2) {
+    public ListNode addTwoNumbers1(ListNode l1, ListNode l2) {
          Stack<Integer> s1 = addStack(l1);
          Stack<Integer> s2 = addStack(l2);
          return stackSum(s1, s2);

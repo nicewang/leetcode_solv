@@ -33,14 +33,75 @@ public class P33SearchInRotatedSortedArray {
         Solution solution = new P33SearchInRotatedSortedArray().new Solution();
         int[] nums = {5, 1, 2, 3, 4};
         System.out.println(solution.search(nums, 1));
-        // TO TEST
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        int index = -1;
-        // 0ms 39.3MB TODO 看官方题解
+
+        // solv 3
         public int search(int[] nums, int target) {
+            int n = nums.length;
+            int l = 0, r = n-1;
+            while (l <= r) {
+                int m = (l+r)/2;
+                if (nums[m] == target) {
+                    return m;
+                }
+
+                if (nums[l] > nums[r]) {
+                    if (nums[m] > nums[r] && (target <= nums[r] || target > nums[m])) {
+                        l = m+1;
+                    } else if (nums[m] > nums[r]) {
+                        r = m-1;
+                    } else if (nums[m] <= nums[r] && (target > nums[r] || target < nums[m])) {
+                        r = m-1;
+                    } else if (nums[m] <= nums[r]) {
+                        l = m+1;
+                    }
+                } else {
+                    if (target > nums[m]) {
+                        l = m+1;
+                    } else {
+                        r = m-1;
+                    }
+                }
+            }
+            return -1;
+        }
+
+        // solv2
+        public int search2(int[] nums, int target) {
+            int n = nums.length;
+            if (n == 0) {
+                return -1;
+            }
+            int l = 0;
+            int r = n-1;
+            while (l <= r) {
+                int m = (l+r) / 2;
+                if (nums[m] == target) {
+                    return m;
+                }
+                if (nums[0] <= nums[m]) {
+                    if (nums[0] <= target && target < nums[m]) {
+                        r = m - 1;
+                    } else {
+                        l = m + 1;
+                    }
+                } else {
+                    if (nums[m] < target && target <= nums[n-1]) {
+                        l = m + 1;
+                    } else {
+                        r = m - 1;
+                    }
+                }
+            }
+            return -1;
+        }
+
+        // solv1: 0ms 39.3MB
+        int index = -1;
+        public int search1(int[] nums, int target) {
             binarySearch(nums, target, 0, nums.length - 1);
             return index;
         }
@@ -61,17 +122,13 @@ public class P33SearchInRotatedSortedArray {
                     index = mid;
                     return true;
                 }
-                if (mid == left && nums[left] < nums[right]) {
-                    if (nums[right] == target) {
-                        index = right;
-                    }
-                    return nums[right] == target;
-                }
-                if (nums[left] < nums[mid] && nums[mid] < nums[right]) {
+                if (nums[left] <= nums[right]) {
                     return target < nums[mid] ? ordinaryBinarySearch(nums, target, left, mid) :
                             ordinaryBinarySearch(nums, target, mid, right);
                 }
-                if (nums[left] > nums[right] && nums[right] > nums[mid]) {
+                // nums[left] > nums[right]
+                if (nums[right] > nums[mid]) {
+                    // nums[left] > nums[mid]
                     if (target < nums[right] && target > nums[mid]) {
                         return ordinaryBinarySearch(nums, target, mid, right);
                     }
