@@ -2,3 +2,4 @@
 .idea
 leetcode_solv.iml
 out/
+**/doc/content
