@@ -1,4 +1,4 @@
-```
+```java
     class Solution {
         // 25ms 43.7MB
         public List<List<Integer>> threeSum(int[] nums) {

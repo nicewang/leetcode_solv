@@ -1,5 +1,6 @@
 #### 1. recursion solution
-```
+
+```java
 class Solution {
 
     // recursion solution

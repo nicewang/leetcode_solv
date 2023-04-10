@@ -1,5 +1,5 @@
 #### 1. quick-sort solution
-```
+```java
     Random rand = new Random();
     public int[] sortArray(int[] nums) {
         quickSort(nums);
@@ -48,7 +48,7 @@
 ```
 #### 2. insert-sort solution
 ###### Time Limit Exceeded
-```
+```java
     Random rand = new Random();
     public int[] sortArray(int[] nums) {
         insertSort(nums);
