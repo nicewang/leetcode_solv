@@ -1,5 +1,8 @@
 #### 1. quick-sort solution
+<tb>
 <iframe src="https://leetcode.com/playground/Eq3DYVBK/shared" frameBorder="0" width="400" height="300"></iframe>
+</tb>
+
 ```java
     Random rand = new Random();
     public int[] sortArray(int[] nums) {
