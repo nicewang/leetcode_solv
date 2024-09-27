@@ -13,7 +13,7 @@ class Solution {
 public:
     // Method 1 - Divided by Pre
     long long distinctNames(std::vector<std::string>& ideas) {
-         std::unordered_map<char, std::unordered_set<std::string>> map;
+        std::unordered_map<char, std::unordered_set<std::string>> map;
         for (std::string& idea : ideas) {
             map[idea[0]].insert(idea.substr(1, idea.size()-1));
         }
