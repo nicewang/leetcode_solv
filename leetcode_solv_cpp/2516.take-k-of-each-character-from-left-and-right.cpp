@@ -8,34 +8,37 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+
 class Solution {
 public:
+    // Quick and Slow Double Pointers
     int takeCharacters(std::string s, int k) {
+        int n = s.size();
         std::vector<int> cnt(3, 0);
-        int len = s.size();
-        int ans = len;
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < n; i++) {
             cnt[s[i] - 'a']++;
         }
-        if (cnt[0] >= k && cnt[1] >= k && cnt[2] >= k) {
-            ans = std::min(ans, len);
-        } else {
+        if (cnt[0] < k || cnt[1] < k || cnt[2] < k) {
             return -1;
         }
-
-        int l = 0;
-        for (int r = 0; r < len; r++) {
+        int l = 0, r = 0;
+        int res = n;
+        while (r < n) {
             cnt[s[r] - 'a']--;
-            while (l < r && (cnt[0] < k || cnt[1] < k || cnt[2] < k)) {
+            while (cnt[0] < k || cnt[1] < k || cnt[2] < k) {
+                if (l == r) {
+                    break;
+                }
                 cnt[s[l] - 'a']++;
                 l++;
             }
+            // to keep: except [l, r], there are enough 'a', 'b' and 'c'
             if (cnt[0] >= k && cnt[1] >= k && cnt[2] >= k) {
-                ans = std::min(ans, len - (r - l + 1));
+                res = std::min(res, n-(r-l+1));
             }
+            r++;
         }
-
-        return ans;
+        return res;
     }
 };
 // @lc code=end

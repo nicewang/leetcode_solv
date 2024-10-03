@@ -23,7 +23,7 @@ public:
     }
     
     int reserve() {
-        std::pop_heap(available.begin(), available.end(), std::greater<int>());
+        pop_heap(available.begin(), available.end(), std::greater<int>());
         int tmp = available.back();
         available.pop_back();
         return tmp;
