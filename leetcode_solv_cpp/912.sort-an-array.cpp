@@ -71,10 +71,41 @@ class Solution {
         quick_sort(nums, m, r);
     }
 
+    // Merge Sort
+    std::vector<int> tmp;
+    void merge_sort(std::vector<int>& nums, int l, int r) {
+        if (l >= r) {
+            return;
+        }
+        int m = (l + r) >> 1;
+        merge_sort(nums, l, m);
+        merge_sort(nums, m+1, r);
+        int i = l, j = m+1;
+        int cnt = 0;
+        while (i <= m && j <= r) {
+            if (nums[i] <= nums[j]) {
+                tmp[cnt++] = nums[i++];
+            } else {
+                tmp[cnt++] = nums[j++];
+            }
+        }
+        while (i <= m) {
+            tmp[cnt++] = nums[i++];
+        }
+        while (j <= r) {
+            tmp[cnt++] = nums[j++];
+        }
+        for (int k = 0; k < r-l+1; k++) {
+            nums[l+k] = tmp[k];
+        }
+    }
+
 public:
     std::vector<int> sortArray(std::vector<int>& nums) {
         int n = nums.size();
-        quick_sort(nums, 0, n-1);
+        // quick_sort(nums, 0, n-1);
+        tmp.resize(n, 0);
+        merge_sort(nums, 0, n-1);
         return nums;
     }
 };
