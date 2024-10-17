@@ -5,23 +5,26 @@
  */
 
 // @lc code=start
+#include <vector>
+#include <unordered_map>
+
 class Solution {
 public:
-    int numberOfPermutations(int n, vector<vector<int>>& requirements) {
+    int numberOfPermutations(int n, std::vector<std::vector<int>>& requirements) {
         const int MOD = 1e9 + 7;
-        unordered_map<int, int> reqMap;
+        std::unordered_map<int, int> reqMap;
         int maxCnt = 0;
         reqMap[0] = 0;
         for (auto& req : requirements) {
             reqMap[req[0]] = req[1];
-            maxCnt = max(maxCnt, req[1]);
+            maxCnt = std::max(maxCnt, req[1]);
         }
         if (reqMap[0]) {
             return 0;
         }
 
-        vector<vector<int>> dp(n, vector<int>(maxCnt + 1, -1));
-        function<int(int, int)> dfs = [&](int end, int cnt) -> int {
+        std::vector<std::vector<int>> dp(n, std::vector<int>(maxCnt + 1, -1));
+        std::function<int(int, int)> dfs = [&](int end, int cnt) -> int {
             if (end == 0) {
                 return 1;
             }
@@ -37,7 +40,7 @@ public:
                 }
             } else {
                 int sm = 0;
-                for (int i = 0; i <= min(end, cnt); ++i) {
+                for (int i = 0; i <= std::min(end, cnt); ++i) {
                     sm = (sm + dfs(end - 1, cnt - i)) % MOD;
                 }
                 return dp[end][cnt] = sm;
