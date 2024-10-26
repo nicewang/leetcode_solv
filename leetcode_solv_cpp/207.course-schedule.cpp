@@ -6,28 +6,34 @@
 
 // @lc code=start
 #include <vector>
+#include <queue>
 
 // topological sort
 class Solution {
 public:
+
+    std::vector<std::vector<int>> edges;
+
     // way-1: DFS
-    bool canFinish(int numCourses, std::vector<std::vector<int>>& prerequisites) {
-        std::vector<int> vis(numCourses);
-        std::vector<std::vector<int>> adjacent(numCourses);
-        for (std::vector<int>& pair : prerequisites) {
+    std::vector<int> vis;
+    bool canFinish_1(int numCourses, std::vector<std::vector<int>>& prerequisites) {
+        vis.resize(numCourses);
+        edges.resize(numCourses);
+        for (const auto& pair : prerequisites) {
             // Actually, the process of building the adjacent,
             // is ​​the process of graph building
             // pre_req -> follow_up
-            adjacent[pair[1]].push_back(pair[0]);
+            edges[pair[1]].push_back(pair[0]);
         }
         for (int i = 0; i < numCourses; i++) {
-            if (!dfs(adjacent, i, vis)) {
+            if (!dfs(i)) {
                 return false;
             }
         }
         return true;
     }
-    bool dfs(std::vector<std::vector<int>>& adjacent, int course_no, std::vector<int>& vis) {
+
+    bool dfs(int course_no) {
         if (vis[course_no] == 1) {
             // already traversed this node before
             // and no circle -> DAG start from this node
@@ -37,13 +43,48 @@ public:
             return false;
         }
         vis[course_no] = -1;
-        for (int prereq : adjacent[course_no]) {
-            if (!dfs(adjacent, prereq, vis)) {
+        for (int prereq : edges[course_no]) {
+            if (!dfs(prereq)) {
                 return false;
             }
         }
         vis[course_no] = 1;
         return true;
+    }
+
+    // way-2: BFS
+    std::vector<int> indeg;
+    bool canFinish(int numCourses, std::vector<std::vector<int>>& prerequisites) {
+        indeg.resize(numCourses);
+        edges.resize(numCourses);
+        for (const auto& pair : prerequisites) {
+            // Actually, the process of building the adjacent,
+            // is ​​the process of graph building
+            // pre_req -> follow_up
+            edges[pair[1]].push_back(pair[0]);
+            ++indeg[pair[0]];
+        }
+        std::queue<int> q;
+
+        for (int i = 0; i < numCourses; i++) {
+            if (indeg[i] == 0) {
+                q.push(i);
+            }
+        }
+
+        int vis_cnt = 0;
+        while (!q.empty()) {
+            int cur = q.front();
+            q.pop();
+            vis_cnt++;
+            for (int next : edges[cur]) {
+                indeg[next]--;
+                if (indeg[next] == 0) {
+                    q.push(next);
+                }
+            }
+        }
+        return vis_cnt == numCourses;
     }
 };
 // @lc code=end
