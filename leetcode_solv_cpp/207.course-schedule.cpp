@@ -48,8 +48,8 @@ public:
             return false;
         }
         vis[course_no] = -1;
-        for (int prereq : edges[course_no]) {
-            if (!dfs(prereq)) {
+        for (int next : edges[course_no]) {
+            if (!dfs(next)) {
                 return false;
             }
         }
