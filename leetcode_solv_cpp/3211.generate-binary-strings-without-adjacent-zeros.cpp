@@ -8,13 +8,17 @@
 #include <vector>
 #include <string>
 
+using std::vector;
+using std::string;
+using std::function;
+
 class Solution {
 public:
-    std::vector<std::string> validStrings(int n) {
-        std::vector<std::string> res;
+    vector<string> validStrings(int n) {
+        vector<string> res;
         std::string str;
 
-        std::function<void(std::string &)> dfs = [&](std::string& str) {
+        function<void(string &)> dfs = [&](string& str) {
             if (str.size() == n) {
                 res.push_back(str);
                 return;
