@@ -10,16 +10,18 @@
 
 using std::vector;
 using std::queue;
+using std::min;
 
 class Solution {
 public:
-    vector<vector<int>> edges; // space=count(edges)=(n-1)+m
+
     vector<int> ans; // len=m
 
     // Way-1: BFS
     // Time Complexity: o(m*(n+m))
     // Space Complexity: o(n+m)
     // m=queries.size()
+    vector<vector<int>> edges; // space=count(edges)=(n-1)+m
     vector<int> shortestDistanceAfterQueries_1(int n, vector<vector<int>>& queries) {
         edges.resize(n);
         for (int i = 0; i < n-1; i++) {
@@ -55,19 +57,31 @@ public:
         return dist[n-1];
     }
 
-    // // Way-2: Dynamic Programming
-    // vector<int> shortestDistanceAfterQueries(int n, vector<vector<int>>& queries) {
-    //     edges.resize(n);
-    //     for (int i = 0; i < n-1; i++) {
-    //         edges[i].push_back(i+1);
-    //     }
-    //     dp[i]: shortest path from 0 to i
-    //     for (const auto& edge : queries) {
-    //         edges[edge[0]].push_back(edge[1]);
-    //         ans.push_back(bfs(n, edges));
-    //     }
-    //     return ans;
-    // }
+    // Way-2: Dynamic Programming
+    vector<vector<int>> prev; // space=count(edges)=(n-1)+m
+    vector<int> shortestDistanceAfterQueries(int n, vector<vector<int>>& queries) {
+        prev.resize(n);
+        vector<int> dp(n);
+        for (int i = 1; i < n; i++) {
+            prev[i].push_back(i-1);
+            dp[i] = i;
+        }
+        // dp[i]: shortest path from 0 to i
+        // dp[i] = min(dp[j]+1) for j in prev[i]
+        for (const auto& edge : queries) {
+            // edge[u, v]
+            int u = edge[0];
+            int v = edge[1];
+            prev[v].push_back(u);
+            for (int j = v; j < n; j++) {
+                for (int prev_j : prev[j]) {
+                    dp[j] = min(dp[prev_j]+1, dp[j]);
+                }
+            }
+            ans.push_back(dp[n-1]);
+        }
+        return ans;
+    }
 };
 // @lc code=end
 
