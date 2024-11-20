@@ -58,6 +58,9 @@ public:
     }
 
     // Way-2: Dynamic Programming
+    // Time Complexity: o(m*(n+m))
+    // Space Complexity: o(n+m)
+    // m=queries.size()
     vector<vector<int>> prev; // space=count(edges)=(n-1)+m
     vector<int> shortestDistanceAfterQueries(int n, vector<vector<int>>& queries) {
         prev.resize(n);
@@ -73,9 +76,23 @@ public:
             int u = edge[0];
             int v = edge[1];
             prev[v].push_back(u);
-            for (int j = v; j < n; j++) {
-                for (int prev_j : prev[j]) {
-                    dp[j] = min(dp[prev_j]+1, dp[j]);
+            // Option 1
+            // for (int j = v; j < n; j++) {
+            //     for (int prev_j : prev[j]) {
+            //         dp[j] = min(dp[prev_j]+1, dp[j]);
+            //     }
+            // }
+            // Option 2: for time efficiency
+            if (dp[u]+1 < dp[v]) {
+                dp[v] = dp[u]+1;
+                // max time complexity: o(count(prev))=o(count(edges))
+                for (int j = v+1; j < n; j++) {
+                    for (int prev_j : prev[j]) {
+                        if (prev_j < v) {
+                            continue;
+                        }
+                        dp[j] = min(dp[prev_j]+1, dp[j]);
+                    }
                 }
             }
             ans.push_back(dp[n-1]);
