@@ -34,9 +34,9 @@ public:
     // Time Complexity: o(nlogn)
     // Space Complexity: o(n) (o(n) = o(n+sn), sn for sorting space complexity with max to o(logn) with c++)
     vector<int> lexicographicallySmallestArray(vector<int>& nums, int limit) {
-        vector<int> numsSorted(nums);           // sorted copy of nums
-        unordered_map<int, int> numToGroup;     // map num to group (within the group, the  the "transitive property" exists)
-        unordered_map<int, list<int>> groupToList;    // map group to a list of numbers that belong to it.
+        vector<int> numsSorted(nums);                   // sorted copy of nums
+        unordered_map<int, int> numToGroup;             // map num to group (within the group, the  the "transitive property" exists)
+        unordered_map<int, list<int>> groupToList;      // map group to a list of numbers that belong to it.
         
         // step-1: sort the numsSorted
         sort(numsSorted.begin(), numsSorted.end());

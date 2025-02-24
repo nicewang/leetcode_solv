@@ -8,40 +8,49 @@
 #include <vector>
 #include <utility>
 
+using std::vector;
+using std::swap;
+
 class Solution {
     // Quick Sort 1: exceed time limit
-    int partition_1(std::vector<int>& nums, int l, int r, int pivot_idx) {
-        std::swap(nums[pivot_idx], nums[r]);
+    // partition_1
+    int partition_1(vector<int>& nums, int l, int r, int pivot_idx) {
+        swap(nums[pivot_idx], nums[r]);
+        // i，j: left-right bidirectional two pointers
         int i = l, j = r-1;
         while (i <= j) {
             if (nums[i] > nums[r]) {
-                std::swap(nums[i], nums[j]);
+                swap(nums[i], nums[j]);
                 j--;
             } else {
                 i++;
             }
         }
-        std::swap(nums[i], nums[r]);
+        swap(nums[i], nums[r]);
         return i;
     }
 
     // Quick Sort 2: exceed time limit
-    int partition_2(std::vector<int>& nums, int l, int r, int pivot_idx) {
-        std::swap(nums[pivot_idx], nums[r]);
+    // partition_2
+    int partition_2(vector<int>& nums, int l, int r, int pivot_idx) {
+        swap(nums[pivot_idx], nums[r]);
+        // i, j: fast-slow two pointers
         int i = l-1, j = l;
         while (j < r) {
             if (nums[j] <= nums[r]) {
                 i++;
-                std::swap(nums[i], nums[j]);
+                swap(nums[i], nums[j]);
             }
             j++;
         }
-        std::swap(nums[i+1], nums[r]);
+        swap(nums[i+1], nums[r]);
         return i+1;
     }
 
     // Quick Sort 3: AC
-    int partition(std::vector<int>& nums, int l, int r, int pivot) {
+    // partition_3
+    int partition(vector<int>& nums, int l, int r, int pivot) {
+        // i, j: left-right bidirectional two pointers
         int i = l, j = r;
         while (i <= j) {
             while (nums[i] < pivot) {
@@ -51,15 +60,28 @@ class Solution {
                 j--;
             }
             if (i <= j) {
-                std::swap(nums[i], nums[j]);
+                swap(nums[i], nums[j]);
                 i++;
                 j--;
             }
+            // To Guarantee when Within the loop:
+            // 1. nums[i] <= pivot
+            // 2. nums[j] >= pivot
         }
+        // Now, nums[i] >= pivot, nums[j] <= pivot
+        // So, when the next deeper recursion:
+        // 1. left for l to j (i-1), or j+1 (if j == i-2)
+        // 2. right for i to r
         return i;
     }
 
-    void quick_sort(std::vector<int>& nums, int l, int r) {
+    // Quick Sort
+    // Time Complexity: o(nlogn) (average)
+    //                  o(n^2) (worst)
+    // Space Complexity: o(logn) (average) (o(logn) for recursion stack)
+    //                   o(n) (worst) (o(n) for recursion stack)
+    // But, the worst case can be avoided by random pivot with high probability
+    void quick_sort(vector<int>& nums, int l, int r) {
         if (l >= r) {
             return;
         }
@@ -67,13 +89,17 @@ class Solution {
         int pivot = nums[l+rand()%(r-l+1)];
         int m = partition(nums, l, r, pivot);
         quick_sort(nums, l, m-1);
-        // quick_sort(nums, m+1, r);
-        quick_sort(nums, m, r);
+        // quick_sort(nums, m+1, r); // for partition_1 and partition_2
+        quick_sort(nums, m, r); // for partition_3
     }
 
     // Merge Sort
-    std::vector<int> tmp;
-    void merge_sort(std::vector<int>& nums, int l, int r) {
+    // Time Complexity: o(nlogn)
+    // Space Complexity: o(n)
+    //                   o(n) for tmp
+    //                   o(logn) for recursion stack
+    vector<int> tmp;
+    void merge_sort(vector<int>& nums, int l, int r) {
         if (l >= r) {
             return;
         }
@@ -100,7 +126,7 @@ class Solution {
         }
     }
 
-    void max_heapify(std::vector<int>& nums, int cur, int end) {
+    void max_heapify(vector<int>& nums, int cur, int end) {
         while ((cur << 1) + 1 <= end) {
             int l = (cur << 1) + 1, r = (cur << 1) + 2;
             int large_idx = cur;
@@ -111,7 +137,7 @@ class Solution {
                 large_idx = r;
             }
             if (large_idx != cur) {
-                std::swap(nums[cur], nums[large_idx]);
+                swap(nums[cur], nums[large_idx]);
                 // since the leaf had been changed, need to max heapify the sub-heap again
                 cur = large_idx;
             } else {
@@ -120,24 +146,24 @@ class Solution {
         }
     }
 
-    void build_maxHeap(std::vector<int>& nums, int end) {
+    void build_maxHeap(vector<int>& nums, int end) {
         for (int i = end/2; i >= 0; i--) {
             max_heapify(nums, i, end);
         }
     }
 
     // Heap Sort
-    void heap_sort(std::vector<int>& nums) {
+    void heap_sort(vector<int>& nums) {
         int n = nums.size();
         build_maxHeap(nums, n-1);
         for (int i = n-1; i > 0; i--) {
-            std::swap(nums[0], nums[i]);
+            swap(nums[0], nums[i]);
             max_heapify(nums, 0, i-1); // in order to time complexity to o(nlogn) (rather than o((nlog)^2))
         }
     }
 
 public:
-    std::vector<int> sortArray(std::vector<int>& nums) {
+    vector<int> sortArray(vector<int>& nums) {
         int n = nums.size();
         quick_sort(nums, 0, n-1);
         // tmp.resize(n, 0);
