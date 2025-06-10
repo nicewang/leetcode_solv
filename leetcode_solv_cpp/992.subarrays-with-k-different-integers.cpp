@@ -69,6 +69,7 @@ using namespace std;
 // public: // annotate this line if running in main.cpp
     // int subarraysWithKDistinct(vector<int>& nums, int k) { // annotate this line if running in main.cpp
     int Solution::subarraysWithKDistinct(vector<int>& nums, int k) { // for running in main.cpp
+        // Attention: The key point here!
         // 1. get slidingWindowFind(k):
         //  total-cnt of subarrays (total-cnt of unique-nums <= k)
         // 2. get slidingWindowFind(k-1):
