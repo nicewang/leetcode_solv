@@ -1,5 +1,5 @@
 // To Compile and Build:
-// g++ -std=c++11 solv.cpp -o solv.so
+// g++ -std=c++11 solv.cpp -o solve.so
 
 #include <string>
 #include <iostream>
