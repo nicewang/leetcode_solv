@@ -1,3 +1,6 @@
+// To Compile and Build:
+// g++ -std=c++11 solv.cpp -o solv.so
+
 #include <string>
 #include <iostream>
 #include <vector>

@@ -7,3 +7,4 @@ out/
 **/doc/submission
 #**/doc/note
 **/doc/solution
+**/*.so

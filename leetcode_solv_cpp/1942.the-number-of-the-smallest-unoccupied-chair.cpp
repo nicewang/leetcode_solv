@@ -14,7 +14,7 @@
 
 #include <vector>
 #include <queue>
-#include <map>
+#include <unordered_map>
 #include <algorithm>
 
 using namespace std;
@@ -66,7 +66,7 @@ public:
         // HashMap:
         // - key: person_idx
         // - val: chair_idx
-        map<int, int> chairMap;
+        unordered_map<int, int> chairMap;
 
         // 3. Then, we need to sort the person according to arrive_time
 
