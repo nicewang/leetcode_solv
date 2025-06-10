@@ -8,9 +8,16 @@
 
 // Problem Link: https://leetcode.com/problems/subarrays-with-k-different-integers/description/
 
-// I will explain my solution while writing the code
+// I will explain my solution while writing the code at the same time
 
-// I utilize the idea of sliding-window
+// I will utilize the idea of sliding-window
+
+// Key Point:
+// Rather than solve the problem directly,
+// this problem should be solved indirectly.
+// Similar to the main idea of prefix-sum,
+// this problem also could be solved by 
+// the idea of **Differential**
 
 #include <vector>
 #include <unordered_map>
@@ -57,8 +64,8 @@ using namespace std;
             }
             // The total cnt of unique-nums in subarray is <= k
             // So, The all subarrays of the current subarray 
-            // are the subarrays whose ends are at j
-            // is the subarray whose total cnt of unique-nums is <= k,
+            // and ends at j
+            // are the subarrays whose total cnt of unique-nums is <= k,
             // and there are len(current subarray) such subarrays
             res += (j-i+1);
             j++;
