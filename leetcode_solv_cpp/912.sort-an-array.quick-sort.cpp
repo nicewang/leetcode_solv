@@ -72,6 +72,6 @@ public:
 // Time Coplexity: o(nlogn) or o(n^2)
 // - Number of Divides (Recursion Stack Depth): from o(logn) to o(n)
 // - Number of Comparisons in each "layer": o(n)
-// Spcae Complexity: o(logn) or o(n) (=ecursion Stack Dapth)
+// Spcae Complexity: o(logn) or o(n) (=Recursion Stack Dapth)
 
 // @lc code=end
