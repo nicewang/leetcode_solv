@@ -9,7 +9,7 @@
 
 // Problem Link: https://leetcode.com/problems/split-array-largest-sum/description/
 
-// utilize dynamic-programming and prefix-sum
+// Utilize dynamic-programming and prefix-sum
 
 #include <vector>
 #include <iostream>
